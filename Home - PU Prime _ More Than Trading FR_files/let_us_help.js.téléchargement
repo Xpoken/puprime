@@ -1,0 +1,530 @@
+var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
+if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
+{
+  let window = _____WB$wombat$assign$function_____("window");
+  let self = _____WB$wombat$assign$function_____("self");
+  let document = _____WB$wombat$assign$function_____("document");
+  let location = _____WB$wombat$assign$function_____("location");
+  let top = _____WB$wombat$assign$function_____("top");
+  let parent = _____WB$wombat$assign$function_____("parent");
+  let frames = _____WB$wombat$assign$function_____("frames");
+  let opener = _____WB$wombat$assign$function_____("opener");
+
+jQuery(document).ready(function($) {
+    
+    var pre_firstName = "";
+    var pre_lastName = "";
+
+    if (getPar("firstName")) {
+        $("#firstName").val(decodeURIComponent(getPar("firstName")));
+    };
+    if (getPar("lastName")) {
+        $("#lastName").val(decodeURIComponent(getPar("lastName")));
+    };
+
+    $(".let_us_help_form #country").focus(function() {
+        $(this).css({ 'background': 'url(/wp-content/themes/puprime_wp/images/search_country_icon2.png) 11px 12px no-repeat', 'padding': '11px 10px 10px 35px' });
+    })
+    $(".let_us_help_form #country").blur(function() {
+        if ($(this).val() == '') {
+            $(this).css({ 'background': '#fff url(/wp-content/themes/puprime_wp/images/pu_live_buttons.png) calc(100% - 10px) center no-repeat','padding': '11px 10px 10px' });
+        } else {
+            $(this).css({ 'background': 'none', 'padding': '11px 10px 10px' });
+        }
+    })
+    $(".let_us_help_form #country").empty();
+    for (var phoneCodeItem in _areanoList) {
+        $(".let_us_help_form #country").siblings('.account_opiton').append("<li>" + phoneCodeItem + "</li>");
+    }
+    var arrCode = [];
+    for (var prop in _areanoList) {
+        arrCode.push(_areanoList[prop]);
+    }
+    var new_arrCode = [];
+    for (var i = 0; i < arrCode.length; i++) {
+        var items = arrCode[i];
+        if ($.inArray(items, new_arrCode) == -1) {
+            new_arrCode.push(items);
+        }
+    }
+    $.each(new_arrCode, function(index, val) {
+        $(".let_us_help_form #phoneCode").siblings('.account_opiton').append("<li>" + val + "</li>");
+    });
+    $.each(_areanoList, function(index, val) {
+        $(".let_us_help_form #phoneCode").siblings('.phoneCode_account_opiton').append("<li data-num=" + val + "><span>" + val + "</span><span class='li_span'>" + index + "</span></li>");
+    });
+
+    var balanceShow_phoneCode = true;
+    $('.let_us_help_form #phoneCode').click(function() {
+        $(this).parent().css('zIndex', '2')
+        $(this).parent().siblings().css('zIndex', '1')
+        $(this).siblings('.phoneCode_account_opiton').find("li[accounr_opiton_item]").addClass('phoneCode_accounr_hover');
+        $(this).siblings('.phoneCode_account_opiton').find("li[accounr_opiton_item]").siblings().removeClass('phoneCode_accounr_hover');
+        if ($(this).val()) {
+            $(this).siblings('.phoneCode_account_opiton').children('li').filter(function(e) {
+                return $(this).text() == $(this).parent().siblings('input[class=phoneCode_account_select]').val()
+            }).addClass('phoneCode_accounr_hover').siblings().removeClass('phoneCode_accounr_hover');
+        }
+        $(this).siblings('.phoneCode_account_opiton').show();
+        var txt2 = $(this).val().toLowerCase();
+        CountrySearch(txt2);
+        if (balanceShow_phoneCode) {
+            $(this).siblings('.phoneCode_account_opiton').show();
+            balanceShow_phoneCode = !balanceShow_phoneCode
+        } else {
+            $(this).siblings('.phoneCode_account_opiton').hide();
+            balanceShow_phoneCode = !balanceShow_phoneCode
+        }
+        $(".pu_contact_left .accout_phone").addClass("active")
+        if ($(this).next().css("display")=='none') {
+            $(this).parent().removeClass("active")
+        }
+    })
+	$('.let_us_help_form #phoneCode').blur(function(){
+		$(".let_us_help_form .pu_contact_left .accout_phone").removeClass("active")
+        let codes = $(this).attr('data-num');
+        $(this).parent().siblings('#phoneCode').val(codes);
+        $(this).addClass('accounr_selected');
+        $(this).siblings().removeClass('accounr_selected');
+        if ($(this).parent().siblings().is('#phoneCode')) {
+            $(this).parent().hide();
+            balanceShow_phoneCode = !balanceShow_phoneCode
+        }
+		$(".let_us_help_form ul li.phone_row .phoneCode_account_opiton").hide()
+	})
+    $('.let_us_help_form .phoneCode_account_opiton li').hover(function() {
+        $(this).addClass('phoneCode_accounr_hover');
+        $(this).siblings().removeClass('phoneCode_accounr_hover');
+    })
+    $('.let_us_help_form .phoneCode_account_opiton li').mousedown(function() {
+        $(".let_us_help_form .pu_contact_left .accout_phone").removeClass("active")
+        let codes = $(this).attr('data-num');
+        $(this).parent().siblings('#phoneCode').val(codes);
+        $(this).addClass('accounr_selected');
+        $(this).siblings().removeClass('accounr_selected');
+        if ($(this).parent().siblings().is('#phoneCode')) {
+            $(this).parent().hide();
+            balanceShow_phoneCode = !balanceShow_phoneCode
+        }
+    })
+
+    var balanceShow = true;
+    $('.let_us_help_form .account_select').click(function() {
+        $(this).parent().css('zIndex', '2')
+        $(this).parent().siblings().css('zIndex', '1')
+
+        $(this).siblings('.account_opiton').find("li[accounr_opiton_item]").addClass('accounr_hover');
+        $(this).siblings('.account_opiton').find("li[accounr_opiton_item]").siblings().removeClass('accounr_hover');
+        if ($(this).val()) {
+            $(this).siblings('.account_opiton').children('li').filter(function(e) {
+                return $(this).text() == $(this).parent().siblings('input[class=account_select]').val()
+            }).addClass('accounr_hover').siblings().removeClass('accounr_hover');
+        }
+
+        $(this).siblings('.account_opiton').show();
+        var txt = $(this).val().toLowerCase();
+        CountrySearch(txt);
+
+        if (balanceShow) {
+            $(this).siblings('.account_opiton').show();
+            balanceShow = !balanceShow
+        } else {
+            $(this).siblings('.account_opiton').hide();
+            balanceShow = !balanceShow
+        }
+    })
+
+    $(".let_us_help_form #country").change(function() {
+        $("#phoneCode").val(_areanoList[$(this).val()]);
+    });
+
+    var valreg = /^[0-9]+.?[0-9]*$/;
+    $('.let_us_help_form .country .account_opiton li').mousedown(function() {
+        let balanceVaule = $(this).text();
+        $(this).parent().siblings('input[class=account_select]').val(balanceVaule);
+        $(this).addClass('accounr_selected');
+
+        $(this).siblings().removeClass('accounr_selected');
+        if ($(this).parent().siblings().is('#country')) {
+            $(this).parent().siblings('#country').change()
+        }
+        if ($(this).parent().siblings().is('#phoneCode')) {
+            $(this).parent().siblings('#phoneCode').change()
+        }
+        pre_firstName = encodeURIComponent($("#firstName").val());
+        pre_lastName = encodeURIComponent($("#lastName").val());
+        pre_form="&firstName="+pre_firstName+"&lastName="+pre_lastName;
+		if(com_or_net == ".com"){
+            if(!(valreg.test(balanceVaule)) && balanceVaule !== 'China'  && balanceVaule !== 'Vietnam'&& balanceVaule !== "Laos" && balanceVaule !== 'Thailand'&& balanceVaule !== 'Malaysia'&& balanceVaule !== 'Singapore'&& balanceVaule !== 'Indonesia'&& balanceVaule !== 'Brunei Darussalam'&&  balanceVaule !== 'Timor'){
+                var url_net="?affid="+$("#affid").val()+"&cpaid="+$("#cpaid").val()+"&cxd="+$("#cxd").val();
+                var address=window.location.pathname
+                window.location.href = "https://web.archive.org/web/20221211013157/https://fr.puprime.net/"+address+url_net+pre_form;
+            }
+        }else{
+            if(getCookie("affid")&&getCookie("affid")!=""&&getCookie("affid")!=null&&getCookie("affid")!="null"){
+        }else{
+                if(balanceVaule == 'China' || balanceVaule == 'Vietnam'|| balanceVaule == "Laos" || balanceVaule == 'Thailand'|| balanceVaule == 'Malaysia'|| balanceVaule == 'Singapore'|| balanceVaule == 'Indonesia'|| balanceVaule == 'Brunei Darussalam'|| balanceVaule == 'Timor'){
+                    var url_net="?affid="+$("#affid").val()+"&cpaid="+$("#cpaid").val()+"&cxd="+$("#cxd").val();
+                    var address=window.location.pathname
+                    window.location.href = "https://web.archive.org/web/20221211013157/https://www.puprime.com/"+address+url_net+pre_form;
+                }
+            }
+       }
+        balanceShow = false;
+    });
+    $('.let_us_help_form .account_opiton li').hover(function() {
+        $(this).addClass('accounr_hover');
+        $(this).siblings().removeClass('accounr_hover');
+    })
+    $('.let_us_help_form .country .account_select').blur(function() {
+        var watchvalue = $(this).val();
+
+        //Form prefill
+        pre_firstName = encodeURIComponent($("#firstName").val());
+        pre_lastName = encodeURIComponent($("#lastName").val());
+        pre_form = "&firstName=" + pre_firstName + "&lastName=" + pre_lastName;
+        //Form prefill
+
+        if (watchvalue != null && watchvalue != "" && RegCountry.includes(watchvalue)) {
+            if(com_or_net == ".com"){
+				if(!(valreg.test(watchvalue)) && watchvalue !== '' && watchvalue !== 'China'  && watchvalue !== 'Vietnam'&& watchvalue !== "Laos" && watchvalue !== 'Thailand'&& watchvalue !== 'Malaysia'&& watchvalue !== 'Singapore'&& watchvalue !== 'Indonesia'&& watchvalue !== 'Brunei Darussalam'&& watchvalue !== 'Timor'){
+						var url_net="?affid="+$("#affid").val()+"&cpaid="+$("#cpaid").val()+"&cxd="+$("#cxd").val();
+                        var address=window.location.pathname
+						window.location.href = "https://web.archive.org/web/20221211013157/https://fr.puprime.net/"+address+url_net+pre_form;
+				}else{
+					if(!getCookie("affid")&&getCookie("affid")==""&&getCookie("affid")==null&&getCookie("affid")=="null"){
+						if(watchvalue == 'China'  || watchvalue == 'Vietnam'|| watchvalue == "Laos" || watchvalue == 'Thailand'|| watchvalue == 'Malaysia'|| watchvalue == 'Singapore'|| watchvalue == 'Indonesia'|| watchvalue == 'Brunei Darussalam'|| watchvalue == 'Timor'){
+							var url_net="?affid="+$("#affid").val()+"&cpaid="+$("#cpaid").val()+"&cxd="+$("#cxd").val();
+                            var address=window.location.pathname
+							window.location.href = "https://web.archive.org/web/20221211013157/https://www.puprime.com/"+address+url_net+pre_form;
+						}
+					}
+				}
+            }
+        }
+        $(this).siblings('.account_opiton').hide();
+        balanceShow = true;
+    })
+
+
+    $(".languanges_nav").click(function(e) {
+        $(".languanges_list").fadeIn();
+        $(".languanges_list").fadeIn("fast");
+        e.stopPropagation();
+    });
+    $(".languanges_list").click(function(e) {
+        e.stopPropagation();
+    });
+    $(document.body).click(function() {
+        $(".languanges_list").fadeOut();
+    });
+
+    var CountryLists = new Array(); //
+    var RegCountry = new Array(); //
+    var CountryList = $(".let_us_help_form .country .account_opiton li")
+    $.each(CountryList, function(index, name) {
+		CountryLists.push(name.innerText.toLowerCase());
+		RegCountry.push(name.innerText);
+	})
+    function CountrySearch(txt) {
+        if ($.trim(txt) != "") {
+            for (var i in CountryLists) {
+                //console.log(i);
+                if (txt != CountryLists[i].substring(0, txt.length)) {
+                    $(".let_us_help_form .country .account_opiton li").eq(i).hide();
+                } else {
+                    $(".let_us_help_form .country .account_opiton li").eq(i).show();
+                }
+            }
+        } else {
+            $(".let_us_help_form .country .account_opiton li").show();
+        }
+    }
+    $(".let_us_help_form #country").keyup(function() {
+        var txt = $(this).val().toLowerCase();
+        CountrySearch(txt);
+    })
+
+
+
+    //var regp = /^[a-zA-Z\u4e00-\u9fa5]+$/;
+    var regp = /^[^0-9]+$/;
+
+    var myReg = /^[\d\s\+]+$/;
+
+    var emailReg = /^[-_A-Za-z0-9]+([-_.][_A-Za-z0-9]+)*@([A-Za-z0-9]+[-.])+[A-Za-zd]{2,5}$/;
+
+    var firstNameFlag = true;
+
+    var phoneF = false;
+
+    var emailF = false;
+
+    var firstName = '';
+
+    var phoneCode = '';
+
+    var phone = '';
+
+    var email = '';
+
+    $(".let_us_help_form #firstName").change(function() {
+        firstName = $(".let_us_help_form #firstName").val();
+        if (firstName == "") {
+            $(".let_us_help_form #firstName").parent().removeClass("error");
+            firstNameFlag = true;
+        } else if (!regp.test(firstName) || firstName.length > 60) {
+            $(".let_us_help_form #firstName").parent().addClass("error");
+            firstNameFlag = false;
+        } else {
+            $(".let_us_help_form #firstName").parent().removeClass("error");
+			$(".let_us_help_form #firstName").css({ "border": "1px solid #d8d8d8" })
+            firstNameFlag = true;
+        }
+    })
+	$(".let_us_help_form #lastName").change(function() {
+	    lastName = $(".let_us_help_form #lastName").val();
+	    if (lastName == "") {
+	        $(".let_us_help_form #lastName").parent().removeClass("error");
+	        lastNameFlag = true;
+	    } else if (!regp.test(lastName) || lastName.length > 60) {
+	        $(".let_us_help_form #lastName").parent().addClass("error");
+	        lastNameFlag = false;
+	    } else {
+	        $(".let_us_help_form #lastName").parent().removeClass("error");
+			$(".let_us_help_form #lastName").css({ "border": "1px solid #d8d8d8" })
+	        lastNameFlag = true;
+	    }
+	})
+	$(".let_us_help_form #country").change(function() {
+	    country = $(".let_us_help_form #country").val();
+	    if (country == "") {
+	        $(".let_us_help_form #country").parent().removeClass("error");
+	        countryFlag = true;
+	    } else if (!regp.test(lastName) || lastName.length > 60) {
+	        $(".let_us_help_form #country").parent().addClass("error");
+	        countryFlag = false;
+	    } else {
+	        $(".let_us_help_form #country").parent().removeClass("error");
+			$(".let_us_help_form #country").css({ "border": "1px solid #d8d8d8" })
+	        countryFlag = true;
+	    }
+	})
+    $(".let_us_help_form #phone,.let_us_help_form #pho").change(function() {
+		phoneCode = $(".let_us_help_form #phoneCode").val();
+		phone = $(".let_us_help_form #phone").val();
+		if (phone == "" || !myReg.test(phone) || phone.length > 20 || phone.length < 4 ) {
+			$(".let_us_help_form #pho").parent().addClass("error");
+			phoneF = false;
+		} else {
+			$(".let_us_help_form #pho").parent().removeClass("error");
+			$(".let_us_help_form #pho").css({ "border": "1px solid #d8d8d8" })
+			phoneF = true;
+		}
+	})
+    $(".let_us_help_form #email").change(function() {
+		firstName = $(".let_us_help_form #firstName").val();
+		if (firstName != "") {
+			firstName = ', ' + firstName + '!';
+		}
+		email = $(".let_us_help_form #email").val();
+		if (email == "" || !emailReg.test(email) || email.length > 60) {
+			$(".let_us_help_form #email").parent().addClass("error");
+			emailF = false;
+		} else {
+			$(".let_us_help_form #email").parent().removeClass("error");
+			$(".let_us_help_form #email").css({ "border": "1px solid #d8d8d8" })
+			emailF = true;
+		}
+	})
+
+    var g_c = "";
+    if (getCookie("c") && getCookie("c") != "" && getCookie("c") != null && getCookie("c") != "null") {
+        g_c = getCookie("c");
+    }
+    var c = "";
+    if (g_c != "") {
+        c = unescape(g_c);
+    }
+
+    if (c != "" && c != null && c != "null" && c != "undefined") {
+        $(".let_us_help_form .form_one_box .form_footer input").after('<input type="text" style="display: none;" id="c" name="c" value="' + c + '">');
+    }
+   
+    var top_live = 0;
+
+    $(".let_us_help_form #button").click(function() {
+        
+        var emailFlag = 0;
+        var phoneFlag = 0;
+        if (top_live == 0) {
+            top_live = 1;
+            $("#button").animate({
+                opacity: '0.3'
+            }, 1000);
+            var firstName = $(".let_us_help_form #firstName").val();
+            var lastName = $(".let_us_help_form #lastName").val();
+            var country = $(".let_us_help_form #country").val();
+            var phone = $(".let_us_help_form #phone").val();
+            var phoneCode = $(".let_us_help_form #phoneCode").val();
+            var email = $(".let_us_help_form #email").val();
+            var source = "VFX";
+            var createDemo = "FALSE";
+
+            if (com_or_net == ".com") {
+                var regulator = "FSA";
+            } else {
+                var regulator = "SVG";
+            }
+            
+            var affid = $(".let_us_help_form #affid").val();
+            var cpaid = $(".let_us_help_form #cpaid").val();
+            var wid = $(".let_us_help_form #wid").val();
+            var cxd = $(".let_us_help_form #cxd").val();
+            var ls = "Website Interests";
+            var uid = $(".let_us_help_form #uid").val();
+            var language = $(".let_us_help_form #language").val();
+            var utm_campaign = $(".let_us_help_form #utm_campaign").val();
+
+
+            var realip = "";
+            if (getCookie("real_ip")) {
+                realip = getCookie("real_ip");
+            }
+            if (!getCookie("real_ip") && realip == "") {
+                top_live = 0;
+                $(".let_us_help_form #button").animate({
+                    opacity: '1'
+                }, 1000);
+                return false;
+            }
+
+            var flag = 0;
+            if (firstName == "" || !regp.test(firstName) || firstName.length > 60) {
+                $(".let_us_help_form #firstName").parent().addClass("error");
+                $(".let_us_help_form #firstName").css({ "border": "1px solid #ff0000"})
+                flag = 1;
+            } else {
+                $(".let_us_help_form #firstName").parent().removeClass("error");
+                $(".let_us_help_form #firstName").css({ "border": "1px solid #d8d8d8"})
+            }
+            if (lastName == "" || !regp.test(lastName) || lastName.length > 60) {
+                $(".let_us_help_form #lastName").parent().addClass("error");
+                $(".let_us_help_form #lastName").css({ "border": "1px solid #ff0000"})
+                flag = 1;
+            } else {
+                $(".let_us_help_form #lastName").parent().removeClass("error");
+                $(".let_us_help_form #lastName").css({ "border": "1px solid #d8d8d8"})
+            }
+            if (country == null || country == "" || !RegCountry.includes(country)) {
+                $(".let_us_help_form #country").parent().addClass("error");
+                $(".let_us_help_form #country").css({ "border": "1px solid #ff0000"})
+                flag = 1;
+            } else {
+                $(".let_us_help_form #country").parent().removeClass("error");
+                $(".let_us_help_form #country").css({ "border": "1px solid #d8d8d8"})
+            }
+            if (phone == "" || !myReg.test(phone) || phone.length > 20 || phone.length < 4 || phoneCode.length > 7 || phoneCode == "") {
+                $(".let_us_help_form #phone").parents().parent().addClass("error");
+                $('.let_us_help_form #pho').css({ "border": "1px solid #ff0000"})
+                flag = 1;
+            } else {
+                $(".let_us_help_form #phone").parent().parent().removeClass("error");
+                $(".let_us_help_form #pho").css({ "border": "1px solid #d8d8d8"})
+            }
+            if (email == "" || !emailReg.test(email) || email.length > 60) {
+                $(".let_us_help_form #email").parent().addClass("error");
+                $(".let_us_help_form #email").css({ "border": "1px solid #ff0000"})
+                flag = 1;
+            } else {
+                $(".let_us_help_form #email").parent().removeClass("error");
+                $(".let_us_help_form #email").css({ "border": "1px solid #d8d8d8"})
+            }
+            
+            if (flag == 0) {
+                console.log("uid=" + uid,"firstName=" +firstName,"lastName=" +lastName,"country=" +country,"mobile=" +phone,"phoneCode=" +phoneCode,"source=" +source,"createDemo=" +createDemo,"email=" +email,"affid=" +affid,"cpaid=" +cpaid,"wid=" +wid,"cxd=" +cxd,"ls=" +ls,"realip=" +realip,"firstLanguage=" +language,"regulator=" +regulator,"c=" +c);
+				$.ajax({
+					type: "POST",
+					url: "https://web.archive.org/web/20221211013157/https://www.puprime.com/data/leads_form.php?v=" + Data(),
+					data: "uid=" + uid + "&firstName=" + firstName + "&lastName=" + lastName + "&country=" + country + "&mobile=" + phone + "&phoneCode=" + phoneCode + "&source=" + source + "&createDemo=" + createDemo + "&email=" + email + "&affid=" + affid + "&cpaid=" + cpaid + "&wid=" + wid + "&cxd=" + cxd + "&ls=" + ls + "&realip=" + realip + "&firstLanguage=" + language + "&regulator=" + regulator + "&c=" + c,
+					success: function(msg) {
+						 var info=JSON.parse(msg)
+						if(info.code==0){
+						    $('.form_one_box').html('<div class="success_box" style="margin:0 auto;text-align:center;"><img alt="" class="signup_success_icon lazyloaded" src="/wp-content/themes/puprime_wp/images/sing_up_success_0622.png" style="width:100px;"><p style="margin-top:20px;">Form has been successfully submitted</p></div>')
+						}else if(info.code==1001){
+						    $('.form_one_box').html('<div style="margin:0 auto;text-align:center;"><img alt=""  class="signup_success_icon lazyloaded" src="/wp-content/themes/puprime_wp/images/pu_failed_ico.png"><p style="margin-top:20px;width:100px;" >Form submission failed, please refresh and try again</p></div>')
+						}else if(info.code==500){
+						    if(info.errmsg=='Email has been registered' || info.errmsg=='Email has been registered. Mobile already exists'){
+                                $('.form_one_box').html(`<div style="margin:0 auto;text-align:center;"><img alt=""  class="signup_success_icon lazyloaded" src="/wp-content/themes/puprime_wp/images/pu_failed_ico.png" style="width:100px;"><p style="margin-top:20px;">${info.errmsg}</p><p>For existing customers, kindly contact us via Live Chat or email us at <a href="mailto:info@puprime.com">info@puprime.com</a></p></div>`)
+                            }else{
+                                $('.form_one_box').html(`<div style="margin:0 auto;text-align:center;"><img alt=""  class="signup_success_icon lazyloaded" src="/wp-content/themes/puprime_wp/images/pu_failed_ico.png" style="width:100px;"><p style="margin-top:20px;">${info.errmsg}</p></div>`)
+                            }
+						}
+                        /* // 
+						if (msg != "") {
+							$(".let_us_help_form #dis_btn").val(msg);
+							$(".let_us_help_form #live_form").submit();
+							$(".pu_contact_right .form_footer #button").html("PLEASE WAIT... ");
+						} else {
+							top_live = 0;
+							$(".pu_contact_right #button").animate({
+								opacity: '1'
+							}, 1000);
+						} */
+					}
+				});
+                return false;
+            } else {
+                top_live = 0;
+                $(".let_us_help_form #button").animate({
+                    opacity: '1'
+                }, 1000);
+            }
+            return false;
+        }
+    });
+    var w = document.documentElement.clientWidth;
+    $(window).resize(function(){
+        w=$(window).width()
+    })
+      if (w>870) {
+        var height=$('.pu_let_us_help_account_wrap').offset().top-150;
+      }else{
+        var height=$('.pu_let_us_help_account_wrap').offset().top-50;
+      }
+    var link=window.location.href
+    var link_last=link.split('&')
+    if (link_last.length>1) {
+        let txt=link_last[link_last.length-1].split('=')    
+        if (txt[0]=='lastName') {
+            console.log(height);
+            $("html:not(:animated),body:not(:animated)").animate({ scrollTop: height}, 500 );
+        }
+    }
+});
+
+
+
+}
+/*
+     FILE ARCHIVED ON 01:31:57 Dec 11, 2022 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 06:57:45 Dec 31, 2022.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 211.232
+  exclusion.robots: 0.065
+  exclusion.robots.policy: 0.059
+  RedisCDXSource: 0.434
+  esindex: 0.006
+  LoadShardBlock: 193.706 (3)
+  PetaboxLoader3.datanode: 200.317 (5)
+  CDXLines.iter: 14.708 (3)
+  load_resource: 57.943
+  PetaboxLoader3.resolve: 41.683
+  loaddict: 10.279
+*/

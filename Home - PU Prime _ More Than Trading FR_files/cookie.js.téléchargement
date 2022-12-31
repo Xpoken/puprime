@@ -1,0 +1,581 @@
+var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
+if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
+{
+  let window = _____WB$wombat$assign$function_____("window");
+  let self = _____WB$wombat$assign$function_____("self");
+  let document = _____WB$wombat$assign$function_____("document");
+  let location = _____WB$wombat$assign$function_____("location");
+  let top = _____WB$wombat$assign$function_____("top");
+  let parent = _____WB$wombat$assign$function_____("parent");
+  let frames = _____WB$wombat$assign$function_____("frames");
+  let opener = _____WB$wombat$assign$function_____("opener");
+
+function getPar(par) {
+	var local_url = document.location.href;
+	var get = local_url.indexOf(par + "=");
+	if (get == -1) {
+		return false;
+	}
+	var get_par = local_url.slice(par.length + get + 1);
+	var nextPar = get_par.indexOf("&");
+	if (nextPar != -1) {
+		get_par = get_par.slice(0, nextPar);
+	}
+	return get_par;
+}
+
+function setCookie(name,value,days) {
+	if (days) {
+	var date = new Date();
+	date.setTime(date.getTime()+(days*24*60*60*1000));
+	var expires = "; expires="+date.toGMTString();
+	}
+	else expires = "";
+	document.cookie = name+"="+value+expires+"; path=/;";
+}
+
+function getCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+	var c = ca[i];
+	while (c.charAt(0)==' ') c = c.substring(1,c.length);
+	if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return "";
+}
+
+function GetUrl(sProp)
+{
+	var re = new RegExp("[&,?]"+sProp + "=([^\\&]*)", "i");
+	var a = re.exec(document.location.search);
+	if (a == null)
+	return "";
+	return a[1];
+}
+
+function getQueryString(name) {
+	var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) {
+		return unescape(r[2]);
+	}
+	return null;
+}
+
+function Data()
+{
+	var date = new Date();
+	var year = date.getFullYear();
+	var month = date.getMonth() + 1;
+	var strDate = date.getDate();
+	if (month >= 1 && month <= 9) {
+		month = "0" + month;
+	}
+	if (strDate >= 0 && strDate <= 9) {
+		strDate = "0" + strDate;
+	}
+	var newRandom = "";
+	for(var i=0;i<5;i++)
+	{
+		newRandom += Math.floor(Math.random()*9 + 1).toString();
+	}
+	var currentdate =  year + month + strDate + newRandom;
+	return currentdate;
+}
+
+var _areanoList={
+	//"Australia":"61",
+	// "Singapore":"65",
+	"Aland Islands":"358",
+	"Albania":"355",
+	"Algeria":"213",
+	"American Samoa":"1684",
+	"Andorra":"376",
+	"Angola":"244",
+	"Anguilla":"1264",
+	"Antarctica":"672",
+	"Antigua and Barbuda":"1268",
+	"Argentina":"54",
+	"Armenia":"374",
+	"Aruba":"297",
+	"Austria":"43",
+	"Azerbaijan":"994",
+	"Bahamas":"1242",
+	"Bahrain":"973",
+	"Bangladesh":"880",
+	"Barbados":"1246",
+	"Belarus":"375",
+	"Belgium":"32",
+	"Belize":"501",
+	"Benin":"229",
+	"Bermuda":"+1",
+	"Bhutan":"975",
+	"Bolivia":"591",
+	"Botswana":"267",
+	"Bouvet Island":"147",
+	"Brazil":"55",
+	"British Indian Ocean Territory":"246",
+	"Brunei Darussalam":"673",
+	"Bulgaria":"359",
+	"Burkina Faso":"226",
+	"Burundi":"257",
+	"Cambodia":"855",
+	"Cameroon":"237",
+	"Canada":"1",
+	"Cape Verde":"238",
+	"Cayman Islands":"1345",
+	"Chad":"235",
+	"Chile":"56",
+	"China":"86",
+	"Christmas Island":"61",
+	"Cocos (Keeling) Islands":"61",
+	"Colombia":"57",
+	"Comoros":"269",
+	"Cook Islands":"682",
+	"Costa Rica":"506",
+	"Cote d'Ivoire":"225",
+	"Croatia":"385",
+	"Cyprus":"357",
+	"Czech Republic":"420",
+	"Congo, Democratic Republic of the":"243",
+	"Denmark":"45",
+	"Djibouti":"253",
+	"Dominica":"1767",
+	"Dominican Republic":"1809",
+	"Ecuador":"593",
+	"Egypt":"20",
+	"El Salvador":"503",
+	"Equatorial Guinea":"240",
+	"Estonia":"372",
+	"Ethiopia":"251",
+	"Falkland Islands (Malvinas)":"500",
+	"Faroe Islands":"298",
+	"Federated States Of Micronesia Micronesia":"691",
+	"Finland":"358",
+	"Fiji":"679",
+	"France":"33",
+	"French Guiana":"594",
+	"French Polynesia":"689",
+	"French Southern Territories":"262",
+	"Gabon":"241",
+	"Gambia":"220",
+	"Germany":"49",
+	"Georgia":"995",
+	"Ghana":"233",
+	"Gibraltar":"350",
+	"Greece":"30",
+	"Greenland":"299",
+	"Grenada":"1473",
+	"Guadeloupe":"590",
+	"Guatemala":"502",
+	"Guernsey":"44",
+	"Guinea":"224",
+	"Guyana":"592",
+	"Haiti":"509",
+	"Heard Island And Mcdonald Islands":"11",
+	"Honduras":"504",
+	"HongKong":"852",
+	"Hungary":"36",
+	"Iceland":"354",
+	"India":"91",
+	"Indonesia":"62",
+	"Ireland":"353",
+	"Iraq":"964",
+	"iran":"98",
+	"Isle Of Man":"44",
+	"Israel":"972",
+	"Italy":"39",
+	"Jamaica":"1876",
+	"Japan":"81",
+	"Jersey":"44",
+	"Jordan":"962",
+	"Kazakhstan":"77",
+	"Kenya":"254",
+	"Kiribati":"686",
+	"Korea, Republic Of":"82",
+	"Kosovo":"383",
+	"Kuwait":"965",
+	"Kyrgyzstan":"996",
+	"Laos":"856",
+	"Latvia":"371",
+	"Lebanon":"961",
+	"Lesotho":"266",
+	"Liberia":"231",
+	"Liechtenstein":"423",
+	"libya":"218",
+	"Lithuania":"370",
+	"Luxembourg":"352",
+	"Macao":"853",
+	"Madagascar":"261",
+	"Malawi":"265",
+	"Malaysia":"60",
+	"Maldives":"960",
+	"Mali":"223",
+	"Malta":"356",
+	"Marshall Islands":"692",
+	"Martinique":"596",
+	"Mauritania":"222",
+	"Mauritius":"230",
+	"Mayotte":"262",
+	"Macedonia":"389",
+	"Mexico":"52",
+	"Moldova":"373",
+	"Monaco":"377",
+	"Mongolia":"976",
+	"Montenegro":"382",
+	"Montserrat":"1664",
+	"Morocco":"212",
+	"Mozambique":"258",
+	"Myanmar":"95",
+	"Namibia":"264",
+	"Nauru":"674",
+	"Nepal":"977",
+	"Netherlands":"31",
+	"Netherlands Antilles":"599",
+	"New Caledonia":"687",
+	"New Zealand":"64",
+	"Nicaragua":"505",
+	"Niger":"227",
+	"Nigeria":"234",
+	"Niue":"683",
+	"Norfolk Island":"672",
+	"Northern Mariana Islands":"670",
+	"Norway":"47",
+	"Oman":"968",
+	"Pakistan":"92",
+	"Palau":"680",
+	"Palestinian Territory, Occupied":"970",
+	"Panama":"507",
+	"Papua New Guinea":"675",
+	"Paraguay":"595",
+	"Peru":"51",
+	"Philippines":"63",
+	"Pitcairn":"64",
+	"Poland":"48",
+	"Portugal":"351",
+	"Puerto Rico":"1787",
+	"Qatar":"974",
+	"Congo, Republic of the":"242",
+	"Reunion":"262",
+	"Romania":"40",
+	"Russia":"7",
+	"Rwanda":"250",
+	"Saint Barthelemy":"590",
+	"Saint Helena":"290",
+	"Saint Kitts and Nevis":"1869",
+	"Saint Lucia":"1758",
+	"Saint Martin":"590",
+	"Saint Pierre And Miquelon":"508",
+	"Saint Vincent and the Grenadines":"1784",
+	"Samoa":"685",
+	"San Marino":"378",
+	"Sao Tome and Principe":"239",
+	"Saudi Arabia":"966",
+	"Senegal":"221",
+	"Serbia":"381",
+	"Seychelles":"248",
+	"Slovakia":"421",
+	"Slovenia":"386",
+	"Solomon Islands":"677",
+	"South Africa":"27",
+	"South Georgia And The South Sandwich Islands":"500",
+	"Spain":"34",
+	"Sri Lanka":"94",
+	"sudan":"249",
+	"Suriname":"597",
+	"Svalbard And Jan Mayen":"47",
+	"Swaziland":"268",
+	"Sweden":"46",
+	"Switzerland":"41",
+	"syria":"963",
+	"Taiwan":"886",
+	"Tajikistan":"992",
+	"Tanzania, United Republic Of":"255",
+	"Thailand":"66",
+	"Timor":"670",
+	"Togo":"228",
+	"Tokelau":"690",
+	"Tonga":"676",
+	"Trinidad and Tobago":"1868",
+	"Tunisia":"216",
+	"Turkey":"90",
+	"Turkmenistan":"993",
+	"Turks And Caicos Islands":"1649",
+	"Tuvalu":"688",
+	"Uganda":"256",
+	"Ukraine":"380",
+	"United Arab Emirates":"971",
+	"United Kingdom":"44",
+	"Uruguay":"598",
+	"Uzbekistan":"998",
+	"Vanuatu":"678",
+	"Vatican City State":"379",
+	"Venezuela":"58",
+	"Vietnam":"84",
+	"Virgin Islands, British":"1284",
+	"Wallis And Futuna":"681",
+	"Western Sahara":"212",
+	"Yemen":"967",
+	"Zambia":"260",
+	"Zimbabwe":"263"
+};
+var new_areanoList=JSON.parse(JSON.stringify(_areanoList));
+
+
+if(com_or_net == ".com"){
+	// FSA France and its affiliated islands
+	delete _areanoList.France;
+	delete _areanoList.Guadeloupe;
+	delete _areanoList.Martinique;
+	delete _areanoList["French Guiana"];
+	delete _areanoList.Reunion;
+	delete _areanoList.Mayotte;
+	delete _areanoList["Saint Pierre And Miquelon"];
+	delete _areanoList["Saint Barthelemy"];
+	delete _areanoList["Saint Martin"];
+	delete _areanoList["Wallis And Futuna"];
+	delete _areanoList["French Polynesia"];
+	delete _areanoList["New Caledonia"];
+	delete _areanoList.Réunion;
+}else{
+	delete _areanoList.China;
+	delete _areanoList["Cote d'Ivoire"];
+	delete _areanoList.Indonesia;
+	delete _areanoList.Malaysia;
+	delete _areanoList.Thailand;
+	delete _areanoList.Vietnam;
+	delete _areanoList.Argentina;
+	delete _areanoList.Algeria;
+	delete _areanoList.Egypt;
+	delete _areanoList.Kuwait;
+	delete _areanoList.Oman;
+	delete _areanoList["Saudi Arabia"];
+	delete _areanoList.Tunisia;
+	delete _areanoList["United States of America"];
+	delete _areanoList["Brunei Darussalam"];
+	// _areanoList["Saint Pierre and Miquelon"] = "508";
+	// _areanoList["Wallis and Futuna"] = "681";
+	// _areanoList["French Southern Territories"] = "262";
+}
+
+
+jQuery(document).ready(function ($) {
+
+	$("select.phoneCode").append("<option value='' selected='selected'>Code</option>");
+	var arrCode = [];
+	for (var prop in _areanoList){
+		arrCode.push(_areanoList[prop]);
+		$("select.phoneCode").append("<option value='"+_areanoList[prop]+"'>"+_areanoList[prop]+"</option>");
+	}
+	var new_arrCode=[];
+	for(var i=0;i<arrCode.length;i++) {
+		var items=arrCode[i];
+		if($.inArray(items,new_arrCode)==-1) {
+			new_arrCode.push(items);
+		}
+	}
+	$.each(new_arrCode,function(index,val){
+		$("select.phoneCode").append("<option value='"+val+"'>"+val+"</option>");
+	});
+
+
+	var ref_url = '';
+	if (document.referrer.length > 0) {
+		ref_url = document.referrer;
+		if(ref_url=="https://web.archive.org/web/20221209224117/https://www.facebook.com/" || ref_url=="https://web.archive.org/web/20221209224117/https://www.facebook.com"){
+			setCookie('ls',"Media-FB",90);
+		}
+		if(ref_url=="https://web.archive.org/web/20221209224117/https://www.google.com/" || ref_url=="https://web.archive.org/web/20221209224117/https://www.google.com"){
+			setCookie('ls',"Media-Google",90);
+		}
+		//console.log(ref_url);
+	}
+
+	// Media-FL & Media-FM (ad)
+	if(GetUrl("utm_source")!="")
+	{
+		setCookie('ls',GetUrl("utm_source"),90);
+	}
+	// ls change value
+	if(GetUrl("utm_source")!="" && GetUrl("utm_medium")!="" && GetUrl("utm_campaign")!="")
+	{
+		let text=GetUrl("utm_source")+'_'+GetUrl("utm_medium")+'_'+GetUrl("utm_campaign");
+		setCookie('ls',text,90);
+	}
+	// utm_medium
+
+    if(GetUrl("ls")!="")
+	{
+		setCookie("ls",GetUrl("ls"),90);
+	}
+
+	if(GetUrl("cpaid")!="")
+	{
+		setCookie("cpaid",GetUrl("cpaid"),15);
+	}
+
+	if(GetUrl("utm_campaign")!="")
+	{
+		setCookie("utm_campaign",GetUrl("utm_campaign"),90);
+	}
+
+	if(GetUrl("affid")!="")
+	{
+		var myaffid = GetUrl("affid");
+		setCookie("affid",myaffid,15);
+	}
+
+	if(GetUrl("cxd")!="")
+	{
+		setCookie("cxd",GetUrl("cxd"),15);
+		var cpaids = GetUrl("cxd");
+		var cpaids1 = cpaids.split("_");
+		setCookie("cpaid",cpaids1[0],15)
+	}
+
+	if(GetUrl("bta")!="")
+	{
+		var bta = GetUrl("bta");
+		setCookie('bta',bta,90);
+	}
+
+	if(GetUrl("am")!="")
+	{
+		var am = GetUrl("am");
+		setCookie('am',am,90);
+	}
+
+
+	var g_affid="",g_cpaid="",g_ls="",g_wid="PUG_EN",g_cxd="",g_utm_campaign="",g_am="",g_bta="";
+
+	if(getCookie("cpaid")&&getCookie("cpaid")!=""&&getCookie("cpaid")!=null&&getCookie("cpaid")!="null")
+    {
+		var g_cpaid=getCookie("cpaid");
+	}
+	if(GetUrl("cpaid")!="")
+	{
+		var g_cpaid=GetUrl("cpaid");
+	}
+
+
+	if(getCookie("affid")&&getCookie("affid")!=""&&getCookie("affid")!=null&&getCookie("affid")!="null")
+	{
+		var g_affid=getCookie("affid");
+	}
+	if(GetUrl("affid")!="")
+	{
+		var g_affid=GetUrl("affid");
+	}
+
+
+	if(getCookie("cxd")&&getCookie("cxd")!=""&&getCookie("cxd")!=null&&getCookie("cxd")!="null")
+    {
+		var g_cxd=getCookie("cxd");
+	}
+	if(GetUrl("cxd")!="")
+	{
+		var g_cxd=GetUrl("cxd");
+	}
+
+
+	if(getCookie("ls")&&getCookie("ls")!=""&&getCookie("ls")!=null&&getCookie("ls")!="null")
+	{
+		var g_ls=getCookie("ls");
+	}
+	if(GetUrl("ls")!="")
+	{
+		var g_ls=GetUrl("ls");
+	}
+	/* if(getCookie("utm_source")&&getCookie("utm_source")!=""&&getCookie("utm_source")!=null&&getCookie("utm_source")!="null")
+	{
+		var g_ls=GetUrl("utm_source");
+	}
+	if(GetUrl("utm_source")!="")
+	{
+		var g_ls=GetUrl("utm_source");
+	}
+	if(getCookie("ad_source")&&getCookie("ad_source")!=""&&getCookie("ad_source")!=null&&getCookie("ad_source")!="null")
+	{
+		var g_ls=GetUrl("ad_source");
+	} */
+
+
+	if(getCookie("utm_campaign")&&getCookie("utm_campaign")!=""&&getCookie("utm_campaign")!=null&&getCookie("utm_campaign")!="null")
+	{
+		var g_utm_campaign=getCookie("utm_campaign");
+	}
+	if(GetUrl("utm_campaign")!="")
+	{
+		var g_utm_campaign=GetUrl("utm_campaign");
+	}
+
+	if(getCookie("am")&&getCookie("am")!=""&&getCookie("am")!=null&&getCookie("am")!="null")
+	{
+		var g_am=getCookie("am");
+	}
+	if(GetUrl("am")!="")
+	{
+		var g_am=GetUrl("am");
+	}
+
+	if(getCookie("bta")&&getCookie("bta")!=""&&getCookie("bta")!=null&&getCookie("bta")!="null")
+	{
+		var g_bta=getCookie("bta");
+	}
+	if(GetUrl("bta")!="")
+	{
+		var g_bta=GetUrl("bta");
+	}
+	
+	var g_c="";
+	if(GetUrl("c")!="")
+	{
+		setCookie("c",GetUrl("c"),90);
+	}
+
+	$("#affid").val(g_affid);
+	if(g_affid == "80660" || g_affid == "80656" || g_affid == "80414" || g_affid == "80413" || g_affid == "80903" || g_affid == "80902"){
+		$("a[href='/forex-trading-account/']").attr("href" , "/");
+    	$("a[href='/forex-trading-account']").attr("href" , "/");
+    	$("a[href='/demo-account/']").attr("href" , "/");
+        $("a[href='/demo-account']").attr("href" , "/"); 
+		$(".top_live_form #button").attr("disabled", true).css("cursor","not-allowed"); 
+        $(".open_demo_account_form #button").attr("disabled", true).css("cursor","not-allowed");
+	}
+	$("#cpaid").val(g_cpaid);
+	$("#wid").val(g_wid);
+	$("#cxd").val(g_cxd);
+	$("#ls").val(g_ls);
+	$("#utm_campaign").val(g_utm_campaign);
+	$("#input_12_56").val(g_am);
+	$("#input_12_57").val(g_bta);
+})
+
+
+
+
+
+}
+/*
+     FILE ARCHIVED ON 22:41:17 Dec 09, 2022 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 06:57:42 Dec 31, 2022.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 220.51
+  exclusion.robots: 0.086
+  exclusion.robots.policy: 0.078
+  cdx.remote: 0.078
+  esindex: 0.011
+  LoadShardBlock: 176.476 (3)
+  PetaboxLoader3.resolve: 191.551 (4)
+  PetaboxLoader3.datanode: 49.471 (5)
+  CDXLines.iter: 23.068 (3)
+  load_resource: 89.517
+  loaddict: 21.852
+*/
